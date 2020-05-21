@@ -5,11 +5,11 @@ const start =async()=>{
     const Server = new Hapi.Server({
         host: "0.0.0.0",
         port: 3000,
-        routes: {
-            files: {
-                relativeTo: Path.join(__dirname, 'public')
-            }
-        }
+        // routes: {
+        //     files: {
+        //         relativeTo: Path.join(__dirname, 'public')
+        //     }
+        // }
     });
     await Server.register(require('@hapi/inert'));
     Server.route({

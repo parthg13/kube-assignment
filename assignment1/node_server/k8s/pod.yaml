@@ -10,7 +10,7 @@ spec:
     - name: static-content
       image: parthgupta13/a1-static-file
       command: ["/bin/sh","-c"]
-      args: ["cp /file-dir/static.html ./public; node index.js"]
+      args: ["cp /file-dir/static.html ./; node index.js"]
       imagePullPolicy: IfNotPresent
       ports:
         - containerPort: 3000
@@ -21,12 +21,18 @@ spec:
         initialDelaySeconds: 5
         periodSeconds: 10
         exec:
-          command: ["cp /public/static.html /public/static.html"]
+          command:
+            - /bin/sh
+            - -c 
+            - cat /app/static.html
       livenessProbe:
         initialDelaySeconds: 15
         periodSeconds: 10
         exec:
-          command: ["cp /public/static.html /public/static.html"] 
+          command:
+            - /bin/sh
+            - -c 
+            - cat /app/static.html
   initContainers:
     - name: init-static-content
       image: busybox:1.28
