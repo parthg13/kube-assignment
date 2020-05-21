@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: static-content-pod
+  #namespace: default
+  labels:
+    component: static-content
+spec:
+  containers:
+    - name: static-content
+      image: parthgupta13/a1-static-file
+      command: ["/bin/sh","-c"]
+      args: ["cp /file-dir/static.html ./public; node index.js"]
+      imagePullPolicy: IfNotPresent
+      ports:
+        - containerPort: 3000
+      volumeMounts:
+        - mountPath: /file-dir
+          name: file-dir
+      readinessProbe:
+        initialDelaySeconds: 5
+        periodSeconds: 10
+        exec:
+          command: ["cp /public/static.html /public/static.html"]
+      livenessProbe:
+        initialDelaySeconds: 15
+        periodSeconds: 10
+        exec:
+          command: ["cp /public/static.html /public/static.html"] 
+  initContainers:
+    - name: init-static-content
+      image: busybox:1.28
+      command: ['sh','-c','mkdir /file-dir; echo "Static content" > /file-dir/static.html']
+      imagePullPolicy: IfNotPresent
+      volumeMounts:
+        - mountPath: /file-dir
+          name: file-dir
+    
+  volumes:
+    - name: file-dir
+      emptyDir: {}

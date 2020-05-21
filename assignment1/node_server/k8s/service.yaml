@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: static-content-clusterip
+spec:
+  type: NodePort
+  ports:
+    - port: 3000
+      targetPort: 3000
+      nodePort: 30000 #The port which we will use to access pod (between 30000-32767)
+  selector:
+    component: static-content # The key to which pod the networking should be done%       
