@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      component: nginx-deployment
+  template:
+    metadata:
+      labels:
+        component: nginx-deployment
+    spec:
+      containers:
+        - name: nginx-dep
+          imagePullPolicy: IfNotPresent
+          image: parthgupta13/a1-nginx-dep:v2.0
+          ports:
+            - containerPort: 3001
