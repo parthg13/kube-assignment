@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: file-pod 
+  labels:
+    component: file-pod
+spec:
+  restartPolicy: Never
+  # selector:
+  #   matchLabels:
+  #     component: file-pod
+  volumes:
+    - name: shared-data
+      emptyDir: {}
+  containers:
+    - name: file-creater
+      image: filecreater
+      imagePullPolicy: IfNotPresent
+      volumeMounts:
+        - name: shared-data
+          mountPath: /app
+
+    - name: file-display
+      image: nginx-file-display
+      imagePullPolicy: IfNotPresent
+      ports:
+        - containerPort: 3002
+      volumeMounts:
+        - name: shared-data
+          mountPath: /usr/share/nginx/html/files

@@ -1,0 +1,33 @@
+apiVersion: apps/v1 
+kind: StatefulSet
+metadata:
+  name: postgres-statefulset
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      component: postgres
+  serviceName: postgresql
+  template:
+    metadata:
+      labels:
+        component: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:latest
+          ports:
+            - containerPort: 5432
+          # volumeMounts:
+          #   - name: postgres-storage
+          #     mountPath: /var/lib/postgresql/data
+          #     subPath: postgres
+          env:
+            - name: POSTGRES_PASSWORD
+              value: root
+              # valueFrom:
+              #   secretKeyRef:
+              #     name: pgpassword
+              #     key: PGPASSWORD
+          
+# kubectl create secret generic pgpassword --from-literal PGPASSWORD=root
